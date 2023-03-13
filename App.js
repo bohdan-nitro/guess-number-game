@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { StyleSheet, ImageBackground, SafeAreaView } from 'react-native';
 import {LinearGradient} from "expo-linear-gradient";
 import StartGameScreen from './screens/StartGameScreen';
@@ -6,11 +6,13 @@ import GameScreen from './screens/GameScreen';
 import Colors from './contstants/Colors';
 import GameOverScreen from './screens/GameoverScreen';
 import {useFonts} from "expo-font";
-import AppLoading from "expo-app-loading"
+import AppLoading from "expo-app-loading";
+import * as SplashScreen from 'expo-splash-screen';
+import { StatusBar } from 'expo-status-bar';
 
 
 
-
+SplashScreen.preventAutoHideAsync();
 export default function App() {
   const [userNumber, setUserNumber] = useState(null);
   const [gameIsOver, setGameIsOver] = useState(true);
@@ -21,8 +23,14 @@ export default function App() {
     "open-sans-bold": require("./assets/fonts/OpenSans-Bold.ttf")
   })
 
-  if(!fontsLoaded){
-    <AppLoading/>
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return null;
   }
 
   const {primary, dark} = Colors;
@@ -53,7 +61,7 @@ export default function App() {
   }
 
   return (
-    <LinearGradient colors={[dark, primary]} style={styles.container}>
+    <LinearGradient onLayout={onLayoutRootView} colors={[dark, primary]} style={styles.container}>
       <ImageBackground 
       imageStyle={styles.backgroundContainer} 
       style={styles.container} 
@@ -63,6 +71,7 @@ export default function App() {
         {screen}
         </SafeAreaView>
       </ImageBackground>
+      <StatusBar style='light' colors={"#fff"}/>
     </LinearGradient>
       
   );

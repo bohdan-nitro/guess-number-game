@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Text, StyleSheet, View, Alert, FlatList } from "react-native";
+import { Text, StyleSheet, View, Alert, FlatList, Dimensions, ScrollView } from "react-native";
 import PrimaryButton from "../components/PrimaryButton";
 import TitleNumber from "../components/TitleNumber";
 import NumberContainer from "../components/NumberCoinatiner";
@@ -76,9 +76,9 @@ const GameScreen = ({numberHandler, userNumber, onGameOver}) => {
                     </View>
                 </Card>
                 <View style={{padding: 20}}>
-                    <FlatList showsVerticalScrollIndicator={false} style={styles.listContainer} data={guesRounds} 
+                    <FlatList keyExtractor={(item, index) => item} contentContainerStyle={{flexGrow: 1}} showsVerticalScrollIndicator={false} style={styles.listContainer} data={guesRounds} 
                     renderItem={(itemRound) => <GuestItem 
-                    roundNumber={roundLenght - itemRound.index} 
+                    roundNumber={roundLenght - itemRound.index}
                     guess={itemRound.item} />}
                     />
                 </View>
@@ -93,11 +93,15 @@ const GameScreen = ({numberHandler, userNumber, onGameOver}) => {
 }
 export default GameScreen;
 
+const screenWidth = Dimensions.get("window").width;
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 15,
-        paddingHorizontal: 20
+        paddingHorizontal: 25,
+        alignItems: "center", 
+        marginTop: screenWidth > 380 ? 40 : 0
     },
     row: {
         width: "100%",
@@ -121,6 +125,8 @@ const styles = StyleSheet.create({
     },
     listContainer: {
         flex: 1,
-        marginTop: 20
+        flexGrow: 1,
+        marginTop: 20,
+        paddingBottom: 50
     }
 })

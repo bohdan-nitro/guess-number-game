@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
 
 const GuestItem = ({roundNumber, guess}) => {
     return (
-        <View style={styles.listItem}>
+        <View key={roundNumber} style={styles.listItem}>
             <Text style={styles.text}>
             #{roundNumber}
             </Text>
